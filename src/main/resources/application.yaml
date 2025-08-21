@@ -1,0 +1,32 @@
+spring:
+ application:
+  name: spring-boot-resilience4j-retry
+
+resilience4j:
+  retry:
+    instances:
+      unstableService:
+        max-attempts: 3
+        wait-duration: 1s
+
+  circuitbreaker:
+    instances:
+      unstableService:
+        sliding-window-size: 5
+        minimum-number-of-calls: 3
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 5s
+
+  ratelimiter:
+   instances:
+     limitedService:   
+       limitForPeriod: 2
+       limitRefreshPeriod: 10s
+       timeoutDuration: 0
+
+  bulkhead:
+   instances:
+    limitedConcurrency:
+     maxConcurrentCalls: 2   # allow only 2 at the same time
+     maxWaitDuration: 0      # do not wait if bulkhead is full
+
